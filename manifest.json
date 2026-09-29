@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Social Feed Hider",
+  "version": "1.0.0",
+  "description": "Hides YouTube Shorts and the home feeds on LinkedIn and Facebook.",
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["linkedin.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.facebook.com/*"],
+      "js": ["facebook.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
