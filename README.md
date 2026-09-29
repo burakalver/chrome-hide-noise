@@ -9,8 +9,12 @@ A small Chrome extension that hides:
 So that I can go to facebook groups or marketplace or a given LinkedIn
 profile or browse youtube without unwanted distractions.
 
-LinkedIn and Facebook feeds are hidden only on their home/feed pages. The
-extension changes page display only; it does not block content from loading.
+LinkedIn and Facebook feeds are hidden only on their home/feed pages
+(`linkedin.com/feed`, and `facebook.com/` or `/home.php`). A login form is
+never hidden. The extension changes page display only; it does not block
+content from loading.
+
+Requires Chrome 105 or later.
 
 ## Install in Chrome
 
@@ -26,21 +30,27 @@ button on `chrome://extensions`, then reload the affected website tabs.
 
 ## Sites and access
 
-The extension runs content scripts on `youtube.com`, `linkedin.com`, and
-`facebook.com`. Chrome may show that it can read and change data on these
+The extension runs content scripts on `www.youtube.com`, `www.linkedin.com`,
+and `www.facebook.com` / `web.facebook.com`. Chrome may show that it can read and change data on these
 sites; this access is needed to find and hide their page elements.
 
 The extension requests no additional permissions, has no background service
-worker, and sends no data anywhere. Its scripts only add a local display
-style to matching page elements.
+worker, and sends no data anywhere. Its scripts only add a local stylesheet
+and marker attributes to the page.
 
 ## How it works
 
 - `manifest.json` — declares the supported sites and their content scripts.
-- `content.js` — hides Shorts elements and watches for YouTube's dynamically
-  loaded content and in-app navigation.
-- `linkedin.js` and `facebook.js` — hide home-feed containers and posts as
-  they appear.
+- `youtube.js` — injects a stylesheet that hides Shorts shelves and items,
+  and marks the sidebar "Shorts" entry and channel "Shorts" tab by label.
+- `feed-hider.js` — shared by LinkedIn and Facebook: marks `<html>` while on
+  the home feed, and a stylesheet hides the feed containers only then.
+- `linkedin.js` and `facebook.js` — each site's home-feed paths and feed
+  container selectors.
+
+Hiding is done with CSS rather than by editing elements one by one, so
+content that loads later, or elements the sites recycle, are handled by the
+browser automatically.
 
 ## Limitations and troubleshooting
 
@@ -56,6 +66,10 @@ If a feed or Shorts item remains visible:
 3. Check the browser console for script errors.
 4. Inspect the visible element in DevTools; the relevant content script may
    need updated selectors.
+
+The YouTube sidebar entry and channel tab are matched by their visible
+label, "Shorts". If your YouTube UI shows a different label, add it to
+`SHORTS_LABELS` in `youtube.js`.
 
 ## License
 
